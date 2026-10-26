@@ -446,6 +446,24 @@ love.test.physics.Shape = function(test)
   test:assertEquals(nil, xn2, 'check ray 2 x')
   test:assertEquals(nil, yn2, 'check ray 2 y')
 
+  -- ray cast argument errors keep the method's argument numbers
+  for index = 1, 9 do
+    local args = {-20, -20, 20, 20, 100, 0, 0, 0, 1}
+    args[index] = 'invalid'
+    local ok, message = pcall(function() shape2:rayCast(unpack(args)) end)
+    test:assertFalse(ok, 'reject invalid ray cast argument ' .. index)
+    test:assertNotEquals(nil, message:find("bad argument #" .. index .. " to 'rayCast'", 1, true),
+      'report ray cast argument ' .. index)
+  end
+  local ok, message = pcall(function() shape2:rayCast(-20, -20, 20, 20, 100, 'invalid') end)
+  test:assertFalse(ok, 'reject invalid attached ray cast child index')
+  test:assertNotEquals(nil, message:find("bad argument #6 to 'rayCast'", 1, true),
+    'report attached ray cast child index')
+  local xn3, yn3, fraction3 = shape2:rayCast(-20, -20, 20, 20, 100)
+  test:assertEquals(xn1, xn3, 'check attached ray normal x')
+  test:assertEquals(yn1, yn3, 'check attached ray normal y')
+  test:assertEquals(fraction1, fraction3, 'check attached ray fraction')
+
   -- check filtering
   test:assertEquals(nil, shape2:getMask(), 'check no mask')
   shape2:setMask(1, 2, 3)

@@ -393,11 +393,11 @@ bool Shape::testPoint(float x, float y, float r, float px, float py) const
 
 int Shape::rayCast(lua_State *L) const
 {
-	float p1x = Physics::scaleDown((float)luaL_checknumber(L, 1));
-	float p1y = Physics::scaleDown((float)luaL_checknumber(L, 2));
-	float p2x = Physics::scaleDown((float)luaL_checknumber(L, 3));
-	float p2y = Physics::scaleDown((float)luaL_checknumber(L, 4));
-	float maxFraction = (float)luaL_checknumber(L, 5);
+	float p1x = Physics::scaleDown((float)luaL_checknumber(L, 2));
+	float p1y = Physics::scaleDown((float)luaL_checknumber(L, 3));
+	float p2x = Physics::scaleDown((float)luaL_checknumber(L, 4));
+	float p2y = Physics::scaleDown((float)luaL_checknumber(L, 5));
+	float maxFraction = (float)luaL_checknumber(L, 6);
 
 	b2RayCastInput input;
 	b2RayCastOutput output;
@@ -405,20 +405,20 @@ int Shape::rayCast(lua_State *L) const
 	input.p2.Set(p2x, p2y);
 	input.maxFraction = maxFraction;
 
-	if (lua_isnoneornil(L, 7))
+	if (lua_isnoneornil(L, 8))
 	{
 		throwIfFixtureNotValid();
-		int childIndex = (int) luaL_optinteger(L, 6, 1) - 1; // Convert from 1-based index
+		int childIndex = (int) luaL_optinteger(L, 7, 1) - 1; // Convert from 1-based index
 		if (!fixture->RayCast(&output, input, childIndex))
 			return 0; // Nothing hit.
 	}
 	else
 	{
 		throwIfShapeNotValid();
-		float x = Physics::scaleDown((float)luaL_checknumber(L, 6));
-		float y = Physics::scaleDown((float)luaL_checknumber(L, 7));
-		float r = (float)luaL_checknumber(L, 8);
-		int childIndex = (int) luaL_optinteger(L, 9, 1) - 1; // Convert from 1-based index
+		float x = Physics::scaleDown((float)luaL_checknumber(L, 7));
+		float y = Physics::scaleDown((float)luaL_checknumber(L, 8));
+		float r = (float)luaL_checknumber(L, 9);
+		int childIndex = (int) luaL_optinteger(L, 10, 1) - 1; // Convert from 1-based index
 	
 		b2Transform transform(b2Vec2(x, y), b2Rot(r));
 		

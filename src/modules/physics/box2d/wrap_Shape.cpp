@@ -199,7 +199,6 @@ int w_Shape_testPoint(lua_State *L)
 int w_Shape_rayCast(lua_State *L)
 {
 	Shape *t = luax_checkshape(L, 1);
-	lua_remove(L, 1);
 	int ret = 0;
 	luax_catchexcept(L, [&](){ ret = t->rayCast(L); });
 	return ret;
